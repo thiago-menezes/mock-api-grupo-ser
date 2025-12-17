@@ -1,0 +1,19 @@
+{
+  "name": "mock-api",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Mock API using json-server deployed on Netlify Functions.",
+  "scripts": {
+    "mock": "json-server --watch db.json --port 5555",
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.3",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.38.0"
+  }
+}
+
+
