@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "Mock API using json-server deployed on Netlify Functions.",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "mock": "json-server --watch db.json --port 5555",
     "dev": "netlify dev"
