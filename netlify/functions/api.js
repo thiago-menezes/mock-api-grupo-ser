@@ -13,33 +13,23 @@ function createApp() {
   app.use(jsonServer.defaults());
   app.use(jsonServer.bodyParser);
 
-  // Netlify routes to functions as `/.netlify/functions/<name>/*`.
-  // Also, our public API is exposed under `/api/*`.
-  // Normalize URL so json-server sees `/cursos` instead of `/api/cursos` (or `/.netlify/functions/api/cursos`).
-  app.use((req, _res, next) => {
-    if (typeof req.url === "string") {
-      req.url = req.url
-        .replace(/^\/\.netlify\/functions\/api/, "")
-        .replace(/^\/api/, "");
-      if (req.url === "") req.url = "/";
-    }
-    next();
-  });
-
   // Optional: add a simple health endpoint
-  app.get("/", (_req, res) => {
+  app.get(
+    ["/", "/api", "/api/", "/.netlify/functions/api", "/.netlify/functions/api/"],
+    (_req, res) => {
     res.json({ ok: true, message: "json-server is running on Netlify Functions" });
-  });
+    }
+  );
 
+  // Support both direct function paths and the public `/api/*` rewrite, plus root.
+  app.use("/.netlify/functions/api", router);
+  app.use("/api", router);
   app.use(router);
 
   return app;
 }
 
-const handler = serverless(createApp(), {
-  // Improve base64 handling; keep defaults otherwise.
-  binary: ["*/*"],
-});
+const handler = serverless(createApp());
 
 module.exports = { handler };
 
